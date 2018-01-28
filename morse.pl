@@ -23,7 +23,6 @@ use warnings;
 use diagnostics;
 
 our %tree = (
-
     # Alpha
     "A" => ".-", "B" => "-...", "C" => "-.-.", "D" => "-..",
     "E" => ".", "F" => "..-.", "G" => "--.", "H" => "....",
@@ -43,13 +42,6 @@ our %tree = (
     "4" => "....-", "5" => ".....", "6" => "-....", "7" => "--...",
     "8" => "---..", "9" => "----.",
 
-    # # Non-ASCII
-    # "Ä" => ".-.-", "Æ" => ".-.-", "Á" => ".--.-", "Å" => ".--.-",
-
-    # # Ligature  Character?? "Ch" => "----",
-    # "ß" => ".../...", "É" => "..-..", "Ñ" => "--.--", "Ö" => "---.",
-    # "Ø" => "---.", "Ü" => "..--",
-
     # RECENTLY STANDARDIZED
     "@" => ".--.-."
 );
@@ -57,12 +49,28 @@ our %tree = (
 sub encode {
     my $str;
 
-    for (split ' ', @_) {
-	$str .= $tree{$_}." " for split //, $_;
+    for (split ' ', $_[0]) {
+	$str .= $tree{uc $_}." " for split //, $_;
 	$str .= " / ";
     }
 
     return $str;
 }
 
-print encode "anas rchid";
+sub decode {
+    my $str;
+
+    for (split '/', $_[0]) {
+	for my $mo_w (split ' ', $_) {
+	    for (keys %tree) {
+		$str .= $_, last if $tree{$_} eq $mo_w;
+	    }
+	}
+
+	$str .= ' ';
+    }
+
+    return $str;
+}
+
+print decode encode "anas rchid";
