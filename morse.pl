@@ -77,4 +77,17 @@ sub decode {
     return $str;
 }
 
-print decode encode "anas rchid";
+my $lines = "";
+chomp ($lines .= $_) while <STDIN>;
+
+for (65..90) {
+    printf "%c - ", $_;
+    print split '/', encode sprintf "%c", "$_";
+    print $_ % 2 ? "\t" : "\n";
+}
+
+print "\n\t-------\n";
+print decode $lines;
+print "\n";
+print encode $lines;
+print "\n";
